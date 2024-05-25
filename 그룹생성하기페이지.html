@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>그룹 생성하기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            border: 1px solid #000;
+            padding: 20px;
+        }
+        .title {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 10px;
+        }
+        .input-group {
+            margin: 20px 0;
+        }
+        .input-group input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #000;
+            margin-right: 10px;
+        }
+        .input-group button {
+            padding: 10px;
+            border: 1px solid #000;
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        .member-list {
+            margin-top: 20px;
+            border: 1px solid #000;
+            padding: 10px;
+        }
+        .member-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+        }
+        .member-item span {
+            flex: 1;
+        }
+        .member-item button {
+            border: 1px solid #000;
+            background-color: #f2f2f2;
+            padding: 5px;
+            cursor: pointer;
+        }
+        .settings {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #000;
+        }
+        .footer {
+            text-align: right;
+            margin-top: 20px;
+        }
+        .footer button {
+            padding: 10px;
+            border: 1px solid #000;
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">그룹 생성하기</div>
+        <div class="input-group">
+            <input type="text" placeholder="그룹명을 입력하세요.">
+        </div>
+        <div class="input-group">
+            <input type="text" placeholder="초대할 멤버의 아이디 or 이메일 입력">
+            <button>초대하기</button>
+        </div>
+        <div class="member-list">
+            <div>초대 멤버로 입력된 리스트 출력</div>
+            <div class="member-item">
+                <span>○ ○ ○</span>
+                <button>삭제</button>
+            </div>
+            <div class="member-item">
+                <span>○ ○ ○</span>
+                <button>삭제</button>
+            </div>
+            <div class="member-item">
+                <span>○ ○ ○</span>
+                <button>삭제</button>
+            </div>
+            <div class="member-item">
+                <span>○ ○ ○</span>
+                <button>삭제</button>
+            </div>
+        </div>
+        <div class="settings">
+            <div>기타 기능 설정 (템플릿 설정 등)</div>
+        </div>
+        <div class="footer">
+            <button>생성하기</button>
+        </div>
+    </div>
+</body>
+</html>
