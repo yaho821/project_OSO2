@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>C6H6J's Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .calendar-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .sidebar {
+            width: 200px;
+            padding: 10px;
+            border-right: 1px solid #ddd;
+        }
+        .calendar {
+            width: 80%;
+            padding: 10px;
+        }
+        .calendar table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .calendar th, .calendar td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            vertical-align: top;
+        }
+        .calendar th {
+            background-color: #f2f2f2;
+        }
+        .event.blue {
+            background-color: #b3e5fc;
+        }
+        .event.orange {
+            background-color: #ffe0b2;
+        }
+        .sidebar .header {
+            font-weight: bold;
+            color: red;
+            margin-bottom: 10px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar li {
+            margin: 5px 0;
+        }
+        .sidebar .group {
+            margin-top: 20px;
+        }
+        .group button {
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            padding: 5px;
+            cursor: pointer;
+        }
+        .dropdown {
+            float: right;
+            margin-top: -40px;
+        }
+        .dropdown select {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>C6H6J's Calendar</h1>
+    <div class="dropdown">
+        <label for="view-select">Monthly Calendar</label>
+        <select id="view-select">
+            <option value="monthly">Monthly Calendar</option>
+        </select>
+    </div>
+    <div class="calendar-container">
+        <div class="sidebar">
+            <div class="header">Calendar Lists</div>
+            <ul>
+                <li><input type="checkbox" checked> 최현준</li>
+                <li><input type="checkbox" checked> 오픈소스 기초프로젝트</li>
+                <li><input type="checkbox"> Team1</li>
+            </ul>
+            <div class="group">
+                <button>+ 그룹 생성하기</button>
+            </div>
+        </div>
+        <div class="calendar">
+            <table>
+                <tr>
+                    <th>SUN</th>
+                    <th>MON</th>
+                    <th>TUE</th>
+                    <th>WED</th>
+                    <th>THU</th>
+                    <th>FRI</th>
+                    <th>SAT</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>31</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="event blue">1차회의</td>
+                    <td></td>
+                    <td class="event blue">2차회의<br><div class="event orange">임원 회의</div></td>
+                    <td></td>
+                    <td></td>
+                    <td class="event blue">3차회의</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                    <td>11</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="event orange">임원 회의</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>14</td>
+                    <td>15</td>
+                    <td>16</td>
+                    <td>17</td>
+                    <td>18</td>
+                    <td>19</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>21</td>
+                    <td>22</td>
+                    <td>23</td>
+                    <td>24</td>
+                    <td>25</td>
+                    <td>26</td>
+                </tr>
+                <tr>
+                    <td>27</td>
+                    <td>28</td>
+                    <td>29</td>
+                    <td>30</td>
+                    <td>31</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

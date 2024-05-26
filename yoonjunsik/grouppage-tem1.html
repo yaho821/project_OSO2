@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team1 Schedule</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+        }
+        .sidebar {
+            width: 20%;
+            padding: 10px;
+            border-right: 1px solid #000;
+        }
+        .main-content {
+            width: 80%;
+            padding: 10px;
+        }
+        .calendar {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .calendar th, .calendar td {
+            border: 1px solid #000;
+            width: 14.28%;
+            height: 100px;
+            text-align: center;
+            vertical-align: top;
+        }
+        .group-members, .schedule, .documents {
+            margin-bottom: 20px;
+        }
+        .group-members li, .schedule li, .documents li {
+            list-style-type: none;
+            margin-bottom: 5px;
+        }
+        .highlight {
+            background-color: #fbe9e7;
+        }
+        .home-button {
+            display: block;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #ffab91;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #ffccbc;
+            padding: 20px;
+        }
+        .calendar-view-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+        .calendar-view-buttons select {
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="#" class="home-button">HOME</a>
+        <h1>Team1</h1>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <div class="group-members">
+                <h3>그룹 멤버</h3>
+                <ul id="member-list">
+                    <li>최현준</li>
+                    <li>배정민</li>
+                    <li>김민준</li>
+                    <li>김태하</li>
+                    <li>정하은</li>
+                </ul>
+            </div>
+            <div class="schedule">
+                <h3>Schedule Lists</h3>
+                <ul id="schedule-list">
+                    <li>4/3 : 임원회의</li>
+                    <li>4/9 : 임원회의</li>
+                </ul>
+            </div>
+            <div class="documents">
+                <h3>Document</h3>
+                <ul>
+                    <li>회의록.hwp</li>
+                    <li>발표자료.ppt</li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="calendar-view-buttons">
+                <select id="calendar-view">
+                    <option value="monthly">Monthly Calendar</option>
+                    <option value="yearly">Yearly Calendar</option>
+                    <option value="weekly">Weekly Calendar</option>
+                </select>
+            </div>
+            <table class="calendar">
+                <thead>
+                    <tr>
+                        <th>SUN</th>
+                        <th>MON</th>
+                        <th>TUE</th>
+                        <th>WED</th>
+                        <th>THU</th>
+                        <th>FRI</th>
+                        <th>SAT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>31</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3 <br> 임원회의</td>
+                        <td>4</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>7</td>
+                        <td>8</td>
+                        <td>9 <br> 임원회의</td>
+                        <td>10</td>
+                        <td>11</td>
+                        <td>12</td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td>14</td>
+                        <td>15</td>
+                        <td>16</td>
+                        <td>17</td>
+                        <td>18</td>
+                        <td>19</td>
+                    </tr>
+                    <tr>
+                        <td>20</td>
+                        <td>21</td>
+                        <td>22</td>
+                        <td>23</td>
+                        <td>24</td>
+                        <td>25</td>
+                        <td>26</td>
+                    </tr>
+                    <tr>
+                        <td>27</td>
+                        <td>28</td>
+                        <td>29</td>
+                        <td>30</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
