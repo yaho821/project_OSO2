@@ -100,10 +100,12 @@
       .group-list input[type="checkbox"] {
         margin-right: 10px;
       }
-      .add-group-form {
+      .add-group-form,
+      .add-schedule-form {
         margin-bottom: 20px;
       }
-      .add-group-form button {
+      .add-group-form button,
+      .add-schedule-form button {
         padding: 8px 16px;
         background-color: #00796b;
         color: white;
@@ -112,7 +114,8 @@
         font-size: 14px;
         cursor: pointer;
       }
-      .add-group-form button:hover {
+      .add-group-form button:hover,
+      .add-schedule-form button:hover {
         background-color: #00695c;
       }
       .header-buttons {
@@ -160,6 +163,31 @@
       .month-selector button:hover {
         background-color: #00695c;
       }
+      .schedule-form {
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        background-color: #f7fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+      }
+      .schedule-form input,
+      .schedule-form button {
+        padding: 8px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .schedule-form button {
+        background-color: #00796b;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      .schedule-form button:hover {
+        background-color: #00695c;
+      }
     </style>
   </head>
   <body>
@@ -184,6 +212,14 @@
         </div>
         <div class="add-group-form">
           <a href="group_creation.html"><button>그룹 생성하기</button></a>
+        </div>
+        <div class="add-schedule-form">
+          <button onclick="toggleScheduleForm()">일정 추가</button>
+          <div class="schedule-form" id="schedule-form">
+            <input type="date" id="schedule-date" />
+            <input type="text" id="schedule-title" placeholder="일정 제목" />
+            <button onclick="addSchedule()">추가</button>
+          </div>
         </div>
       </div>
       <div class="main-content">
@@ -344,6 +380,26 @@
         currentMonth = month;
         document.getElementById("month-selector").classList.remove("active");
         renderCalendar();
+      }
+
+      function toggleScheduleForm() {
+        const form = document.getElementById("schedule-form");
+        form.style.display = form.style.display === "flex" ? "none" : "flex";
+      }
+
+      function addSchedule() {
+        const date = document.getElementById("schedule-date").value;
+        const title = document.getElementById("schedule-title").value;
+
+        if (date && title) {
+          displayedSchedules.push({ date, title });
+          renderCalendar();
+          document.getElementById("schedule-date").value = "";
+          document.getElementById("schedule-title").value = "";
+          toggleScheduleForm();
+        } else {
+          alert("모든 필드를 채워주세요.");
+        }
       }
 
       document.addEventListener("DOMContentLoaded", () => {
