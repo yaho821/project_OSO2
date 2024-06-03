@@ -1,175 +1,354 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="utf-8">
-    <title>C6H6J's Calendar</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>최현준의 개인 캘린더</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .calendar-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .sidebar {
-            width: 200px;
-            padding: 10px;
-            border-right: 1px solid #ddd;
-        }
-        .calendar {
-            width: 80%;
-            padding: 10px;
-        }
-        .calendar table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .calendar th, .calendar td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-            vertical-align: top;
-        }
-        .calendar th {
-            background-color: #f2f2f2;
-        }
-        .event.blue {
-            background-color: #b3e5fc;
-        }
-        .event.orange {
-            background-color: #ffe0b2;
-        }
-        .sidebar .header {
-            font-weight: bold;
-            color: red;
-            margin-bottom: 10px;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-        .sidebar li {
-            margin: 5px 0;
-        }
-        .sidebar .group {
-            margin-top: 20px;
-        }
-        .group button {
-            background-color: #f2f2f2;
-            border: 1px solid #ddd;
-            padding: 5px;
-            cursor: pointer;
-        }
-        .dropdown {
-            float: right;
-            margin-top: -40px;
-        }
-        .dropdown select {
-            padding: 5px;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f4f8;
+        margin: 0;
+        padding: 0;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+        padding: 20px;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+        color: #333;
+      }
+      .home-button {
+        display: block;
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #00796b;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+      .container {
+        display: flex;
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .sidebar {
+        width: 250px;
+        padding: 20px;
+        background-color: #f7fafc;
+        border-right: 1px solid #e2e8f0;
+      }
+      .main-content {
+        flex-grow: 1;
+        padding: 20px;
+      }
+      .calendar {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .calendar th,
+      .calendar td {
+        border: 1px solid #e2e8f0;
+        width: 14.28%;
+        height: 100px;
+        text-align: center;
+        vertical-align: top;
+        color: #333;
+        font-size: 14px;
+      }
+      .calendar th {
+        background-color: #f7fafc;
+        font-weight: bold;
+      }
+      .group-list,
+      .schedule {
+        margin-bottom: 20px;
+      }
+      .group-list h3,
+      .schedule h3 {
+        margin-bottom: 10px;
+        font-size: 18px;
+        color: #333;
+      }
+      .group-list ul,
+      .schedule ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+      }
+      .group-list li,
+      .schedule li {
+        margin-bottom: 5px;
+        font-size: 14px;
+        color: #333;
+      }
+      .group-list li {
+        display: flex;
+        align-items: center;
+      }
+      .group-list input[type="checkbox"] {
+        margin-right: 10px;
+      }
+      .add-group-form {
+        margin-bottom: 20px;
+      }
+      .add-group-form button {
+        padding: 8px 16px;
+        background-color: #00796b;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .add-group-form button:hover {
+        background-color: #00695c;
+      }
+      .header-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .header-buttons button {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .calendar-icon {
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .delete-button {
+        margin-left: 5px; /* X 버튼을 오른쪽으로 띄우는 여백 조절 */
+      }
+      .month-selector {
+        display: none;
+        position: absolute;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        border-radius: 8px;
+        z-index: 1000;
+      }
+      .month-selector.active {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+      .month-selector button {
+        padding: 8px;
+        font-size: 16px;
+        background-color: none;
+        color: black;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .month-selector button:hover {
+        background-color: #00695c;
+      }
     </style>
-</head>
-<body>
-    <h1>C6H6J's Calendar</h1>
-    <div class="dropdown">
-        <label for="view-select">Monthly Calendar</label>
-        <select id="view-select">
-            <option value="monthly">Monthly Calendar</option>
-        </select>
+  </head>
+  <body>
+    <div class="header">
+      <a href="#" class="home-button">HOME</a>
+      <h1>최현준의 개인 캘린더</h1>
     </div>
-    <div class="calendar-container">
-        <div class="sidebar">
-            <div class="header">Calendar Lists</div>
-            <ul>
-                <li><input type="checkbox" checked> 최현준</li>
-                <li><input type="checkbox" checked> 오픈소스 기초프로젝트</li>
-                <li><input type="checkbox"> Team1</li>
-            </ul>
-            <div class="group">
-                <button>+ 그룹 생성하기</button>
-            </div>
+    <div class="container">
+      <div class="sidebar">
+        <div class="group-list">
+          <h3>그룹 목록</h3>
+          <ul id="group-list">
+            <li>
+              <input type="checkbox" onclick="toggleGroupSchedule('team1')" />
+              team1
+            </li>
+            <li>
+              <input type="checkbox" onclick="toggleGroupSchedule('OSO2')" />
+              오픈소스기초프로젝트OSO2
+            </li>
+          </ul>
         </div>
-        <div class="calendar">
-            <table>
-                <tr>
-                    <th>SUN</th>
-                    <th>MON</th>
-                    <th>TUE</th>
-                    <th>WED</th>
-                    <th>THU</th>
-                    <th>FRI</th>
-                    <th>SAT</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>31</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td class="event blue">1차회의</td>
-                    <td></td>
-                    <td class="event blue">2차회의<br><div class="event orange">임원 회의</div></td>
-                    <td></td>
-                    <td></td>
-                    <td class="event blue">3차회의</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                    <td>10</td>
-                    <td>11</td>
-                    <td>12</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td class="event orange">임원 회의</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>13</td>
-                    <td>14</td>
-                    <td>15</td>
-                    <td>16</td>
-                    <td>17</td>
-                    <td>18</td>
-                    <td>19</td>
-                </tr>
-                <tr>
-                    <td>20</td>
-                    <td>21</td>
-                    <td>22</td>
-                    <td>23</td>
-                    <td>24</td>
-                    <td>25</td>
-                    <td>26</td>
-                </tr>
-                <tr>
-                    <td>27</td>
-                    <td>28</td>
-                    <td>29</td>
-                    <td>30</td>
-                    <td>31</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>
+        <div class="add-group-form">
+          <a href="group_creation.html"><button>그룹 생성하기</button></a>
         </div>
+      </div>
+      <div class="main-content">
+        <div class="header-buttons">
+          <button onclick="prevMonth()">&#9664;</button>
+          <span
+            id="calendar-header"
+            style="margin: 0 20px; font-size: 18px"
+          ></span>
+          <button onclick="nextMonth()">&#9654;</button>
+          <span class="calendar-icon" onclick="toggleMonthSelector()">📅</span>
+          <div class="month-selector" id="month-selector">
+            <button onclick="selectMonth(0)">1</button>
+            <button onclick="selectMonth(1)">2</button>
+            <button onclick="selectMonth(2)">3</button>
+            <button onclick="selectMonth(3)">4</button>
+            <button onclick="selectMonth(4)">5</button>
+            <button onclick="selectMonth(5)">6</button>
+            <button onclick="selectMonth(6)">7</button>
+            <button onclick="selectMonth(7)">8</button>
+            <button onclick="selectMonth(8)">9</button>
+            <button onclick="selectMonth(9)">10</button>
+            <button onclick="selectMonth(10)">11</button>
+            <button onclick="selectMonth(11)">12</button>
+          </div>
+        </div>
+        <table class="calendar">
+          <thead>
+            <tr>
+              <th>SUN</th>
+              <th>MON</th>
+              <th>TUE</th>
+              <th>WED</th>
+              <th>THU</th>
+              <th>FRI</th>
+              <th>SAT</th>
+            </tr>
+          </thead>
+          <tbody id="calendar-body">
+            <!-- Calendar will be populated here -->
+          </tbody>
+        </table>
+      </div>
     </div>
-</body>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      let schedules = {
+        team1: [
+          { date: "2024-04-01", title: "1차회의" },
+          { date: "2024-04-03", title: "2차회의" },
+          { date: "2024-04-06", title: "3차회의" },
+        ],
+        OSO2: [
+          { date: "2024-04-10", title: "오픈소스 미팅" },
+          { date: "2024-04-12", title: "오픈소스 발표 준비" },
+        ],
+      };
+      let displayedSchedules = [];
+
+      let currentYear = new Date().getFullYear();
+      let currentMonth = new Date().getMonth();
+
+      const monthNames = [
+        "1월",
+        "2월",
+        "3월",
+        "4월",
+        "5월",
+        "6월",
+        "7월",
+        "8월",
+        "9월",
+        "10월",
+        "11월",
+        "12월",
+      ];
+
+      function toggleGroupSchedule(group) {
+        const groupCheckbox = document.querySelector(
+          `input[onclick="toggleGroupSchedule('${group}')"]`
+        );
+        if (groupCheckbox.checked) {
+          displayedSchedules = displayedSchedules.concat(schedules[group]);
+        } else {
+          displayedSchedules = displayedSchedules.filter(
+            (schedule) => !schedules[group].includes(schedule)
+          );
+        }
+        renderCalendar();
+      }
+
+      function renderCalendar() {
+        const calendar = document.getElementById("calendar-body");
+        const calendarHeader = document.getElementById("calendar-header");
+        calendarHeader.textContent = `${currentYear}년 ${monthNames[currentMonth]}`;
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        const daysInMonth = new Date(
+          currentYear,
+          currentMonth + 1,
+          0
+        ).getDate();
+
+        let html = "";
+        let day = 1;
+
+        for (let i = 0; i < 6; i++) {
+          // up to 6 weeks
+          html += "<tr>";
+          for (let j = 0; j < 7; j++) {
+            if (i === 0 && j < firstDay) {
+              html += "<td></td>";
+            } else if (day > daysInMonth) {
+              html += "<td></td>";
+            } else {
+              const date = `${currentYear}-${String(currentMonth + 1).padStart(
+                2,
+                "0"
+              )}-${String(day).padStart(2, "0")}`;
+              const schedule = displayedSchedules.find((s) => s.date === date);
+              html += `<td>${day} ${
+                schedule ? "<br>" + schedule.title : ""
+              }</td>`;
+              day++;
+            }
+          }
+          html += "</tr>";
+          if (day > daysInMonth) break; // exit loop early if days are exhausted
+        }
+
+        calendar.innerHTML = html;
+      }
+
+      function prevMonth() {
+        if (currentMonth === 0) {
+          currentMonth = 11;
+          currentYear--;
+        } else {
+          currentMonth--;
+        }
+        renderCalendar();
+      }
+
+      function nextMonth() {
+        if (currentMonth === 11) {
+          currentMonth = 0;
+          currentYear++;
+        } else {
+          currentMonth++;
+        }
+        renderCalendar();
+      }
+
+      function toggleMonthSelector() {
+        document.getElementById("month-selector").classList.toggle("active");
+      }
+
+      function selectMonth(month) {
+        currentMonth = month;
+        document.getElementById("month-selector").classList.remove("active");
+        renderCalendar();
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        renderCalendar();
+      });
+    </script>
+  </body>
 </html>
