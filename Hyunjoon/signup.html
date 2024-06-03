@@ -10,13 +10,7 @@
     <header class="bg-[#00695c] text-white py-4">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-2xl font-bold"><a href="home.html" class="hover:underline">오픈소스 기초프로젝트</a></h1>
-            <nav>
-                <ul class="flex space-x-4">
-                    <!-- <li><a href="home.html" class="hover:underline">홈</a></li> -->
-                    <li><a href="login.html" class="hover:underline">로그인</a></li>
-                    <li><a href="signup.html" class="hover:underline">회원가입</a></li>
-                </ul>
-            </nav>
+            <!-- 우측 상단의 로그인 버튼 삭제 -->
         </div>
     </header>
 
@@ -41,8 +35,11 @@
                     <input type="password" id="confirm_password" class="w-full p-3 rounded border border-gray-300" placeholder="비밀번호 재확인">
                     <p id="message" class="mt-2 text-sm"></p>
                 </div>
-                <button type="submit" class="w-full bg-[#00695c] text-white p-3 rounded">회원가입</button>
+                <button type="submit" class="w-full bg-[#00695c] text-white p-3 rounded mb-4">회원가입</button>
             </form>
+            <div class="text-center">
+                <a href="login.html" class="hover:underline text-[#00695c]">로그인</a>
+            </div>
         </div>
     </section>
 
