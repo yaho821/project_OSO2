@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>최현준의 개인 캘린더</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+        .logout-button {
+            position: absolute;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #00796b;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .logout-button:hover {
+            background-color: #00695c;
+        }
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 250px;
+            padding: 20px;
+            background-color: #f7fafc;
+            border-right: 1px solid #e2e8f0;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .calendar {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .calendar th {
+            border: 1px solid #e2e8f0;
+            width: 14.28%;
+            height: 50px; /* 요일 셀의 높이를 줄임 */
+            text-align: center;
+            vertical-align: middle;
+            background-color: #f7fafc;
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+        .calendar td {
+            border: 1px solid #e2e8f0;
+            width: 14.28%;
+            height: 100px;
+            text-align: center;
+            vertical-align: top;
+            color: #333;
+            font-size: 14px;
+        }
+        .group-list,
+        .schedule {
+            margin-bottom: 20px;
+        }
+        .group-list h3,
+        .schedule h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+        .group-list ul,
+        .schedule ul {
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+        }
+        .group-list li,
+        .schedule li {
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+        .group-list li {
+            display: flex;
+            align-items: center;
+        }
+        .group-list input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .add-group-form,
+        .add-schedule-form {
+            margin-bottom: 20px;
+        }
+        .add-group-form button,
+        .add-schedule-form button {
+            padding: 8px 16px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .add-group-form button:hover,
+        .add-schedule-form button:hover {
+            background-color: #00695c;
+        }
+        .header-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header-buttons button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .calendar-icon {
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .delete-button {
+            margin-left: 5px; /* X 버튼을 오른쪽으로 띄우는 여백 조절 */
+        }
+        .month-selector {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            z-index: 1000;
+        }
+        .month-selector.active {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .month-selector button {
+            padding: 8px;
+            font-size: 16px;
+            background-color: none;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .month-selector button:hover {
+            background-color: #00695c;
+        }
+        .schedule-form {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        .schedule-form input,
+        .schedule-form button {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .schedule-form button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .schedule-form button:hover {
+            background-color: #00695c;
+        }
+        .schedule-item {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 2px 5px;
+            border: 1px solid #00796b;
+            color: #00796b;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>최현준의 개인 캘린더</h1>
+        <button class="logout-button">로그아웃</button>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <div class="group-list">
+                <h3>그룹 목록</h3>
+                <ul id="group-list">
+                    <li>
+                        <input type="checkbox" onclick="toggleGroupSchedule('team1')" />
+                        team1
+                    </li>
+                    <li>
+                        <input type="checkbox" onclick="toggleGroupSchedule('OSO2')" />
+                        오픈소스기초프로젝트OSO2
+                    </li>
+                </ul>
+            </div>
+            <div class="add-group-form">
+                <a href="group_creation.html"><button>그룹 생성하기</button></a>
+            </div>
+            <div class="add-schedule-form">
+                <button onclick="toggleScheduleForm()">일정 추가</button>
+                <div class="schedule-form" id="schedule-form">
+                    <input type="date" id="schedule-date" />
+                    <input type="text" id="schedule-title" placeholder="일정 제목" />
+                    <button onclick="addSchedule()">추가</button>
+                </div>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="header-buttons">
+                <button onclick="prevMonth()">&#9664;</button>
+                <span id="calendar-header" style="margin: 0 20px; font-size: 18px"></span>
+                <button onclick="nextMonth()">&#9654;</button>
+                <span class="calendar-icon" onclick="toggleMonthSelector()">📅</span>
+                <div class="month-selector" id="month-selector">
+                    <button onclick="selectMonth(0)">1</button>
+                    <button onclick="selectMonth(1)">2</button>
+                    <button onclick="selectMonth(2)">3</button>
+                    <button onclick="selectMonth(3)">4</button>
+                    <button onclick="selectMonth(4)">5</button>
+                    <button onclick="selectMonth(5)">6</button>
+                    <button onclick="selectMonth(6)">7</button>
+                    <button onclick="selectMonth(7)">8</button>
+                    <button onclick="selectMonth(8)">9</button>
+                    <button onclick="selectMonth(9)">10</button>
+                    <button onclick="selectMonth(10)">11</button>
+                    <button onclick="selectMonth(11)">12</button>
+                </div>
+            </div>
+            <table class="calendar" id="calendar">
+                <thead>
+                    <tr>
+                        <th>일</th>
+                        <th>월</th>
+                        <th>화</th>
+                        <th>수</th>
+                        <th>목</th>
+                        <th>금</th>
+                        <th>토</th>
+                    </tr>
+                </thead>
+                <tbody id="calendar-body"></tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        const calendar = document.getElementById("calendar");
+        const calendarHeader = document.getElementById("calendar-header");
+        const calendarBody = document.getElementById("calendar-body");
+        const monthSelector = document.getElementById("month-selector");
+        const scheduleForm = document.getElementById("schedule-form");
+
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth();
+
+        function renderCalendar() {
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const lastDate = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const lastDay = new Date(currentYear, currentMonth, lastDate).getDay();
+
+            calendarHeader.textContent = `${currentYear}년 ${currentMonth + 1}월`;
+            calendarBody.innerHTML = "";
+
+            let html = "<tr>";
+
+            for (let i = 0; i < firstDay; i++) {
+                html += "<td></td>";
+            }
+
+            for (let date = 1; date <= lastDate; date++) {
+                if ((firstDay + date - 1) % 7 === 0 && date > 1) {
+                    html += "</tr><tr>";
+                }
+                html += `<td>${date}</td>`;
+            }
+
+            for (let i = lastDay; i < 6; i++) {
+                html += "<td></td>";
+            }
+
+            html += "</tr>";
+
+            calendarBody.innerHTML = html;
+        }
+
+        function prevMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        }
+
+        function toggleMonthSelector() {
+            monthSelector.classList.toggle("active");
+        }
+
+        function selectMonth(month) {
+            currentMonth = month;
+            renderCalendar();
+            toggleMonthSelector();
+        }
+
+        function toggleScheduleForm() {
+            scheduleForm.style.display =
+                scheduleForm.style.display === "none" ? "flex" : "none";
+        }
+
+        function addSchedule() {
+            const date = document.getElementById("schedule-date").value;
+            const title = document.getElementById("schedule-title").value;
+            if (date && title) {
+                const [year, month, day] = date.split("-");
+                const cell = calendar.querySelector(
+                    `td:nth-child(${parseInt(day) + new Date(year, month - 1, 1).getDay()})`
+                );
+                const scheduleItem = document.createElement("div");
+                scheduleItem.className = "schedule-item";
+                scheduleItem.textContent = title;
+                cell.appendChild(scheduleItem);
+            }
+        }
+
+        function toggleGroupSchedule(group) {
+            console.log("그룹 일정 토글: " + group);
+        }
+
+        renderCalendar();
+    </script>
+</body>
+</html>

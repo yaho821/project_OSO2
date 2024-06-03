@@ -13,6 +13,7 @@
       }
       .header {
         text-align: center;
+        height: 80px;
         margin-bottom: 20px;
         padding: 20px;
         background-color: white;
@@ -310,8 +311,8 @@
           const listItem = document.createElement("li");
           listItem.className = "schedule-item";
           listItem.innerHTML = `
-                  <span>${schedule.date} : ${schedule.title}</span>
-                  <button onclick="deleteSchedule(${index})"class="delete-button"><span class="delete-icon">X</span></button>
+                  <span>${schedule.title}</span>
+                  <button onclick="deleteSchedule(${index})" class="delete-button"><span class="delete-icon">X</span></button>
               `;
           scheduleList.appendChild(listItem);
         });
