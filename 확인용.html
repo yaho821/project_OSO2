@@ -12,11 +12,7 @@
         padding: 0;
       }
       .header {
-        height: 80px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
+        text-align: center;
         margin-bottom: 20px;
         padding: 20px;
         background-color: white;
@@ -26,11 +22,10 @@
         margin: 0;
         font-size: 24px;
         color: #333;
-        font-weight: 300;
       }
-      .logout-button {
-        position: absolute;
-        right: 20px;
+      .home-button {
+        display: block;
+        margin-bottom: 10px;
         padding: 10px;
         background-color: #00796b;
         color: white;
@@ -38,11 +33,6 @@
         text-decoration: none;
         border-radius: 5px;
         font-size: 16px;
-        cursor: pointer;
-        border: none;
-      }
-      .logout-button:hover {
-        background-color: #00695c;
       }
       .container {
         display: flex;
@@ -67,17 +57,7 @@
         width: 100%;
         border-collapse: collapse;
       }
-      .calendar th {
-        border: 1px solid #e2e8f0;
-        width: 14.28%;
-        height: 50px;
-        text-align: center;
-        vertical-align: middle;
-        background-color: #f7fafc;
-        font-weight: bold;
-        color: #333;
-        font-size: 14px;
-      }
+      .calendar th,
       .calendar td {
         border: 1px solid #e2e8f0;
         width: 14.28%;
@@ -86,7 +66,10 @@
         vertical-align: top;
         color: #333;
         font-size: 14px;
-        padding: 5px;
+      }
+      .calendar th {
+        background-color: #f7fafc;
+        font-weight: bold;
       }
       .group-list,
       .schedule {
@@ -152,17 +135,7 @@
         cursor: pointer;
       }
       .delete-button {
-        margin-left: 5px;
-        background-color: black;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        width: 48px;
-        height: 28px;
-      }
-      .delete-button:hover {
-        background-color: #d50000;
+        margin-left: 5px; /* X 버튼을 오른쪽으로 띄우는 여백 조절 */
       }
       .month-selector {
         display: none;
@@ -215,33 +188,12 @@
       .schedule-form button:hover {
         background-color: #00695c;
       }
-      .schedule-item {
-        display: inline-block;
-        margin-top: 5px;
-        padding: 2px 5px;
-        border: 1px solid #00796b;
-        background-color: #00796b; /* 초록색 배경 */
-        color: white; /* 흰색 폰트 */
-        border-radius: 4px;
-        font-size: 12px;
-        height: 24px;
-        width: 130.94px;
-      }
-      .added-schedule-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 5px 10px;
-        color: #333; /* 흰색 폰트 */
-        border-radius: 4px;
-        margin-bottom: 5px;
-      }
     </style>
   </head>
   <body>
     <div class="header">
+      <a href="#" class="home-button">HOME</a>
       <h1>최현준의 개인 캘린더</h1>
-      <button class="logout-button">로그아웃</button>
     </div>
     <div class="container">
       <div class="sidebar">
@@ -268,10 +220,6 @@
             <input type="text" id="schedule-title" placeholder="일정 제목" />
             <button onclick="addSchedule()">추가</button>
           </div>
-        </div>
-        <div class="schedule">
-          <h3>추가된 일정</h3>
-          <ul id="added-schedule-list"></ul>
         </div>
       </div>
       <div class="main-content">
@@ -301,13 +249,13 @@
         <table class="calendar">
           <thead>
             <tr>
-              <th>일</th>
-              <th>월</th>
-              <th>화</th>
-              <th>수</th>
-              <th>목</th>
-              <th>금</th>
-              <th>토</th>
+              <th>SUN</th>
+              <th>MON</th>
+              <th>TUE</th>
+              <th>WED</th>
+              <th>THU</th>
+              <th>FRI</th>
+              <th>SAT</th>
             </tr>
           </thead>
           <tbody id="calendar-body">
@@ -390,16 +338,10 @@
                 2,
                 "0"
               )}-${String(day).padStart(2, "0")}`;
-              const schedule = displayedSchedules.filter(
-                (s) => s.date === date
-              );
-              html += `<td>${day}`;
-              if (schedule.length) {
-                schedule.forEach((s) => {
-                  html += `<br><span class="schedule-item">${s.title}</span>`;
-                });
-              }
-              html += `</td>`;
+              const schedule = displayedSchedules.find((s) => s.date === date);
+              html += `<td>${day} ${
+                schedule ? "<br>" + schedule.title : ""
+              }</td>`;
               day++;
             }
           }
@@ -452,29 +394,12 @@
         if (date && title) {
           displayedSchedules.push({ date, title });
           renderCalendar();
-          updateScheduleList(date, title);
           document.getElementById("schedule-date").value = "";
           document.getElementById("schedule-title").value = "";
           toggleScheduleForm();
         } else {
           alert("모든 필드를 채워주세요.");
         }
-      }
-
-      function updateScheduleList(date, title) {
-        const scheduleList = document.getElementById("added-schedule-list");
-        const scheduleItem = document.createElement("li");
-        scheduleItem.className = "added-schedule-item";
-        scheduleItem.innerHTML = `<span>${date}: ${title}</span><button class="delete-button" onclick="deleteSchedule('${date}', '${title}', this)">삭제</button>`;
-        scheduleList.appendChild(scheduleItem);
-      }
-
-      function deleteSchedule(date, title, button) {
-        displayedSchedules = displayedSchedules.filter(
-          (schedule) => !(schedule.date === date && schedule.title === title)
-        );
-        renderCalendar();
-        button.parentElement.remove();
       }
 
       document.addEventListener("DOMContentLoaded", () => {

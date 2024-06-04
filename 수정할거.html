@@ -26,7 +26,6 @@
         margin: 0;
         font-size: 24px;
         color: #333;
-        /*font-weight: 300;*/
       }
       .home-button,
       .logout-button {
@@ -109,6 +108,9 @@
       }
       .group-members li,
       .schedule li,
+      .schedule li .delete-button {
+        margin-left: 10px; /* 여백 조절 */
+      }
       .documents li {
         margin-bottom: 5px;
         font-size: 14px;
@@ -311,10 +313,7 @@
       <div class="main-content">
         <div class="header-buttons">
           <button onclick="prevMonth()">&#9664;</button>
-          <span
-            id="calendar-header"
-            style="margin: 0 20px; font-size: 18px"
-          ></span>
+          <span id="calendar-header" style="margin: 0 20px; font-size: 18px"></span>
           <button onclick="nextMonth()">&#9654;</button>
           <span class="calendar-icon" onclick="toggleMonthSelector()">📅</span>
           <div class="month-selector" id="month-selector">
@@ -467,7 +466,7 @@
         scheduleList.innerHTML = "";
         schedules.forEach((schedule, index) => {
           const li = document.createElement("li");
-          li.innerText = `${schedule.date} - ${schedule.title}`;
+          li.innerHTML = `${schedule.date}:${schedule.title}`;
           const deleteButton = document.createElement("button");
           deleteButton.className = "delete-button";
           deleteButton.innerText = "삭제";
