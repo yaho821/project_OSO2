@@ -70,7 +70,7 @@
       .calendar th {
         border: 1px solid #e2e8f0;
         width: 14.28%;
-        height: 50px; /* 요일 셀의 높이를 줄임 */
+        height: 50px;
         text-align: center;
         vertical-align: middle;
         background-color: #f7fafc;
@@ -152,7 +152,17 @@
         cursor: pointer;
       }
       .delete-button {
-        margin-left: 5px; /* X 버튼을 오른쪽으로 띄우는 여백 조절 */
+        margin-left: 5px;
+        background-color: black;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 48px;
+        height: 28px;
+      }
+      .delete-button:hover {
+        background-color: #d50000;
       }
       .month-selector {
         display: none;
@@ -210,9 +220,21 @@
         margin-top: 5px;
         padding: 2px 5px;
         border: 1px solid #00796b;
-        color: #00796b;
+        background-color: #00796b; /* 초록색 배경 */
+        color: white; /* 흰색 폰트 */
         border-radius: 4px;
         font-size: 12px;
+        height: 24px;
+        width: 130.94px;
+      }
+      .added-schedule-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 10px;
+        color: #333; /* 흰색 폰트 */
+        border-radius: 4px;
+        margin-bottom: 5px;
       }
     </style>
   </head>
@@ -246,6 +268,10 @@
             <input type="text" id="schedule-title" placeholder="일정 제목" />
             <button onclick="addSchedule()">추가</button>
           </div>
+        </div>
+        <div class="schedule">
+          <h3>추가된 일정</h3>
+          <ul id="added-schedule-list"></ul>
         </div>
       </div>
       <div class="main-content">
@@ -426,12 +452,29 @@
         if (date && title) {
           displayedSchedules.push({ date, title });
           renderCalendar();
+          updateScheduleList(date, title);
           document.getElementById("schedule-date").value = "";
           document.getElementById("schedule-title").value = "";
           toggleScheduleForm();
         } else {
           alert("모든 필드를 채워주세요.");
         }
+      }
+
+      function updateScheduleList(date, title) {
+        const scheduleList = document.getElementById("added-schedule-list");
+        const scheduleItem = document.createElement("li");
+        scheduleItem.className = "added-schedule-item";
+        scheduleItem.innerHTML = `<span>${date}: ${title}</span><button class="delete-button" onclick="deleteSchedule('${date}', '${title}', this)">삭제</button>`;
+        scheduleList.appendChild(scheduleItem);
+      }
+
+      function deleteSchedule(date, title, button) {
+        displayedSchedules = displayedSchedules.filter(
+          (schedule) => !(schedule.date === date && schedule.title === title)
+        );
+        renderCalendar();
+        button.parentElement.remove();
       }
 
       document.addEventListener("DOMContentLoaded", () => {
