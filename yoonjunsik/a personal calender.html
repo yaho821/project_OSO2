@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>최현준의 개인 캘린더</title>
+    <title>오픈소스 기초프로젝트 OSO2</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -14,7 +14,7 @@
       .header {
         height: 80px;
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
         position: relative;
         margin-bottom: 20px;
@@ -26,11 +26,11 @@
         margin: 0;
         font-size: 24px;
         color: #333;
-        font-weight: 300;
+        /*font-weight: 300;*/
       }
+      .home-button,
       .logout-button {
-        position: absolute;
-        right: 20px;
+        display: block;
         padding: 10px;
         background-color: #00796b;
         color: white;
@@ -38,9 +38,11 @@
         text-decoration: none;
         border-radius: 5px;
         font-size: 16px;
-        cursor: pointer;
-        border: none;
       }
+      .logout-button {
+        margin-left: 10px;
+      }
+      .home-button:hover,
       .logout-button:hover {
         background-color: #00695c;
       }
@@ -67,62 +69,78 @@
         width: 100%;
         border-collapse: collapse;
       }
-      .calendar th {
-        border: 1px solid #e2e8f0;
-        width: 14.28%;
-        height: 50px;
-        text-align: center;
-        vertical-align: middle;
-        background-color: #f7fafc;
-        font-weight: bold;
-        color: #333;
-        font-size: 14px;
-      }
+      .calendar th,
       .calendar td {
         border: 1px solid #e2e8f0;
         width: 14.28%;
-        height: 100px;
         text-align: center;
         vertical-align: top;
         color: #333;
         font-size: 14px;
+        cursor: pointer;
+        position: relative;
+        height: 100px;
         padding: 5px;
       }
-      .group-list,
-      .schedule {
+      .calendar th {
+        height: 50px;
+        vertical-align: middle;
+        background-color: #f7fafc;
+        font-weight: bold;
+      }
+      .group-members,
+      .schedule,
+      .documents {
         margin-bottom: 20px;
       }
-      .group-list h3,
-      .schedule h3 {
+      .group-members h3,
+      .schedule h3,
+      .documents h3 {
         margin-bottom: 10px;
         font-size: 18px;
         color: #333;
       }
-      .group-list ul,
-      .schedule ul {
+      .group-members ul,
+      .schedule ul,
+      .documents ul {
         padding: 0;
         margin: 0;
         list-style-type: none;
       }
-      .group-list li,
-      .schedule li {
+      .group-members li,
+      .schedule li,
+      .documents li {
         margin-bottom: 5px;
         font-size: 14px;
         color: #333;
       }
-      .group-list li {
-        display: flex;
-        align-items: center;
+      .documents li a {
+        text-decoration: none;
+        color: #333;
       }
-      .group-list input[type="checkbox"] {
-        margin-right: 10px;
+      .documents li a:hover {
+        color: gray;
       }
-      .add-group-form,
-      .add-schedule-form {
+      .schedule-item:hover .schedule-details {
+        display: block;
+      }
+      .highlight {
+        background-color: #e0f7fa;
+      }
+      .add-schedule-form,
+      .add-document-form {
         margin-bottom: 20px;
       }
-      .add-group-form button,
-      .add-schedule-form button {
+      .add-schedule-form input,
+      .add-document-form input {
+        margin-right: 10px;
+        padding: 8px;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      .add-schedule-form button,
+      .add-document-form button {
         padding: 8px 16px;
         background-color: #00796b;
         color: white;
@@ -131,8 +149,8 @@
         font-size: 14px;
         cursor: pointer;
       }
-      .add-group-form button:hover,
-      .add-schedule-form button:hover {
+      .add-schedule-form button:hover,
+      .add-document-form button:hover {
         background-color: #00695c;
       }
       .header-buttons {
@@ -140,6 +158,7 @@
         justify-content: center;
         align-items: center;
         margin-bottom: 20px;
+        position: relative;
       }
       .header-buttons button {
         background: none;
@@ -151,19 +170,6 @@
         font-size: 20px;
         cursor: pointer;
       }
-      .delete-button {
-        margin-left: 5px;
-        background-color: black;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        width: 48px;
-        height: 28px;
-      }
-      .delete-button:hover {
-        background-color: #d50000;
-      }
       .month-selector {
         display: none;
         position: absolute;
@@ -172,6 +178,8 @@
         padding: 10px;
         border-radius: 8px;
         z-index: 1000;
+        top: 10px;
+        right: 250px;
       }
       .month-selector.active {
         display: grid;
@@ -190,88 +198,114 @@
       .month-selector button:hover {
         background-color: #00695c;
       }
-      .schedule-form {
-        display: none;
-        flex-direction: column;
-        gap: 10px;
+      .add-schedule-button {
+        display: block;
         padding: 10px;
-        background-color: #f7fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
+        background-color: #00796b;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-top: 10px;
+        border: none;
       }
-      .schedule-form input,
-      .schedule-form button {
-        padding: 8px;
-        font-size: 14px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
+      .add-schedule-button:hover {
+        background-color: #00695c;
       }
-      .schedule-form button {
+      .file-upload {
+        margin-top: 10px;
+        padding: 8px 16px;
         background-color: #00796b;
         color: white;
         border: none;
+        border-radius: 4px;
+        font-size: 14px;
         cursor: pointer;
+        text-align: center;
       }
-      .schedule-form button:hover {
+      .file-upload:hover {
         background-color: #00695c;
       }
-      .schedule-item {
-        display: inline-block;
-        margin-top: 5px;
-        padding: 2px 5px;
-        border: 1px solid #00796b;
-        background-color: #00796b; /* 초록색 배경 */
-        color: white; /* 흰색 폰트 */
+      .delete-button {
+        margin-left: 10px;
+        background-color: black;
+        color: white;
+        border: none;
         border-radius: 4px;
-        font-size: 12px;
-        height: 24px;
-        width: 130.94px;
+        padding: 2px 8px;
+        cursor: pointer;
       }
-      .added-schedule-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 5px 10px;
-        color: #333; /* 흰색 폰트 */
-        border-radius: 4px;
-        margin-bottom: 5px;
+      .delete-button:hover {
+        background-color: darkred;
+      }
+      .schedule-item {
+        margin-top: 5px;
+        font-size: 12px;
+        color: white;
+        background-color: #00796b;
+        padding: 3px;
+        border-radius: 3px;
+        text-align: center;
       }
     </style>
   </head>
   <body>
     <div class="header">
-      <h1>최현준의 개인 캘린더</h1>
-      <button class="logout-button">로그아웃</button>
+      <a href="#" class="home-button">HOME</a>
+      <h1>오픈소스 기초프로젝트 OSO2</h1>
+      <a href="#" class="logout-button">로그아웃</a>
     </div>
     <div class="container">
       <div class="sidebar">
-        <div class="group-list">
-          <h3>그룹 목록</h3>
-          <ul id="group-list">
-            <li>
-              <input type="checkbox" onclick="toggleGroupSchedule('team1')" />
-              team1
-            </li>
-            <li>
-              <input type="checkbox" onclick="toggleGroupSchedule('OSO2')" />
-              오픈소스기초프로젝트OSO2
-            </li>
+        <div class="group-members">
+          <h3>그룹 멤버</h3>
+          <ul>
+            <li>김연희</li>
+            <li>최현준</li>
+            <li>윤준식</li>
+            <li>이예호</li>
           </ul>
         </div>
-        <div class="add-group-form">
-          <a href="group_creation.html"><button>그룹 생성하기</button></a>
-        </div>
-        <div class="add-schedule-form">
-          <button onclick="toggleScheduleForm()">일정 추가</button>
-          <div class="schedule-form" id="schedule-form">
+        <div class="schedule">
+          <h3>Schedule Lists</h3>
+          <ul id="schedule-list">
+            <!-- Schedule items will be populated here -->
+          </ul>
+          <button class="add-schedule-button" onclick="toggleAddScheduleForm()">
+            일정 추가
+          </button>
+          <div
+            class="add-schedule-form"
+            id="add-schedule-form"
+            style="display: none"
+          >
             <input type="date" id="schedule-date" />
-            <input type="text" id="schedule-title" placeholder="일정 제목" />
+            <input
+              type="text"
+              id="schedule-title"
+              placeholder="Schedule Title"
+            />
             <button onclick="addSchedule()">추가</button>
           </div>
         </div>
-        <div class="schedule">
-          <h3>추가된 일정</h3>
-          <ul id="added-schedule-list"></ul>
+        <div class="documents">
+          <h3>Document</h3>
+          <ul id="document-list">
+            <li><a href="#">회의록.hwp</a></li>
+            <li><a href="#">발표자료.ppt</a></li>
+          </ul>
+          <button class="file-upload" onclick="toggleAddDocumentForm()">
+            파일 추가
+          </button>
+          <div
+            class="add-document-form"
+            id="add-document-form"
+            style="display: none"
+          >
+            <input type="file" id="document-file" />
+            <button onclick="addDocument()">추가</button>
+          </div>
         </div>
       </div>
       <div class="main-content">
@@ -284,21 +318,10 @@
           <button onclick="nextMonth()">&#9654;</button>
           <span class="calendar-icon" onclick="toggleMonthSelector()">📅</span>
           <div class="month-selector" id="month-selector">
-            <button onclick="selectMonth(0)">1</button>
-            <button onclick="selectMonth(1)">2</button>
-            <button onclick="selectMonth(2)">3</button>
-            <button onclick="selectMonth(3)">4</button>
-            <button onclick="selectMonth(4)">5</button>
-            <button onclick="selectMonth(5)">6</button>
-            <button onclick="selectMonth(6)">7</button>
-            <button onclick="selectMonth(7)">8</button>
-            <button onclick="selectMonth(8)">9</button>
-            <button onclick="selectMonth(9)">10</button>
-            <button onclick="selectMonth(10)">11</button>
-            <button onclick="selectMonth(11)">12</button>
+            <!-- Months will be populated here dynamically -->
           </div>
         </div>
-        <table class="calendar">
+        <table class="calendar" id="calendar">
           <thead>
             <tr>
               <th>일</th>
@@ -311,103 +334,74 @@
             </tr>
           </thead>
           <tbody id="calendar-body">
-            <!-- Calendar will be populated here -->
+            <!-- Calendar dates will be populated here dynamically -->
           </tbody>
         </table>
       </div>
     </div>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      let schedules = {
-        team1: [
-          { date: "2024-04-01", title: "1차회의" },
-          { date: "2024-04-03", title: "2차회의" },
-          { date: "2024-04-06", title: "3차회의" },
-        ],
-        OSO2: [
-          { date: "2024-04-10", title: "오픈소스 미팅" },
-          { date: "2024-04-12", title: "오픈소스 발표 준비" },
-        ],
-      };
-      let displayedSchedules = [];
+      const members = ["김연희", "최현준", "윤준식", "이예호"];
+      let schedules = [];
+      let documents = [];
+      let currentYear, currentMonth;
 
-      let currentYear = new Date().getFullYear();
-      let currentMonth = new Date().getMonth();
+      document.addEventListener("DOMContentLoaded", () => {
+        const today = new Date();
+        currentYear = today.getFullYear();
+        currentMonth = today.getMonth();
+        renderCalendar(currentYear, currentMonth);
+        renderMonthSelector();
+      });
 
-      const monthNames = [
-        "1월",
-        "2월",
-        "3월",
-        "4월",
-        "5월",
-        "6월",
-        "7월",
-        "8월",
-        "9월",
-        "10월",
-        "11월",
-        "12월",
-      ];
+      function renderCalendar(year, month) {
+        const calendarHeader = document.getElementById("calendar-header");
+        calendarHeader.innerText = `${year}년 ${month + 1}월`;
 
-      function toggleGroupSchedule(group) {
-        const groupCheckbox = document.querySelector(
-          `input[onclick="toggleGroupSchedule('${group}')"]`
-        );
-        if (groupCheckbox.checked) {
-          displayedSchedules = displayedSchedules.concat(schedules[group]);
-        } else {
-          displayedSchedules = displayedSchedules.filter(
-            (schedule) => !schedules[group].includes(schedule)
-          );
+        const calendarBody = document.getElementById("calendar-body");
+        calendarBody.innerHTML = "";
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const lastDate = new Date(year, month + 1, 0).getDate();
+
+        let date = 1;
+        for (let i = 0; i < 6; i++) {
+          const row = document.createElement("tr");
+          for (let j = 0; j < 7; j++) {
+            const cell = document.createElement("td");
+            if (i === 0 && j < firstDay) {
+              cell.innerText = "";
+            } else if (date > lastDate) {
+              break;
+            } else {
+              cell.innerText = date;
+              cell.dataset.date = `${year}-${month + 1}-${date}`;
+              cell.onclick = () => selectDate(cell.dataset.date);
+
+              const scheduleItems = schedules.filter(
+                (schedule) =>
+                  new Date(schedule.date).toDateString() ===
+                  new Date(year, month, date).toDateString()
+              );
+              scheduleItems.forEach((schedule) => {
+                const scheduleItem = document.createElement("div");
+                scheduleItem.className = "schedule-item";
+                scheduleItem.innerText = schedule.title;
+                cell.appendChild(scheduleItem);
+              });
+
+              date++;
+            }
+            row.appendChild(cell);
+          }
+          calendarBody.appendChild(row);
         }
-        renderCalendar();
       }
 
-      function renderCalendar() {
-        const calendar = document.getElementById("calendar-body");
-        const calendarHeader = document.getElementById("calendar-header");
-        calendarHeader.textContent = `${currentYear}년 ${monthNames[currentMonth]}`;
-        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-        const daysInMonth = new Date(
-          currentYear,
-          currentMonth + 1,
-          0
-        ).getDate();
-
-        let html = "";
-        let day = 1;
-
-        for (let i = 0; i < 6; i++) {
-          // up to 6 weeks
-          html += "<tr>";
-          for (let j = 0; j < 7; j++) {
-            if (i === 0 && j < firstDay) {
-              html += "<td></td>";
-            } else if (day > daysInMonth) {
-              html += "<td></td>";
-            } else {
-              const date = `${currentYear}-${String(currentMonth + 1).padStart(
-                2,
-                "0"
-              )}-${String(day).padStart(2, "0")}`;
-              const schedule = displayedSchedules.filter(
-                (s) => s.date === date
-              );
-              html += `<td>${day}`;
-              if (schedule.length) {
-                schedule.forEach((s) => {
-                  html += `<br><span class="schedule-item">${s.title}</span>`;
-                });
-              }
-              html += `</td>`;
-              day++;
-            }
-          }
-          html += "</tr>";
-          if (day > daysInMonth) break; // exit loop early if days are exhausted
-        }
-
-        calendar.innerHTML = html;
+      function selectDate(date) {
+        const selectedDate = new Date(date);
+        const options = { year: "numeric", month: "long", day: "numeric" };
+        alert(selectedDate.toLocaleDateString("ko-KR", options));
       }
 
       function prevMonth() {
@@ -417,7 +411,7 @@
         } else {
           currentMonth--;
         }
-        renderCalendar();
+        renderCalendar(currentYear, currentMonth);
       }
 
       function nextMonth() {
@@ -427,59 +421,94 @@
         } else {
           currentMonth++;
         }
-        renderCalendar();
+        renderCalendar(currentYear, currentMonth);
+      }
+
+      function renderMonthSelector() {
+        const monthSelector = document.getElementById("month-selector");
+        monthSelector.innerHTML = "";
+        for (let i = 0; i < 12; i++) {
+          const button = document.createElement("button");
+          button.innerText = `${i + 1}`;
+          button.onclick = () => {
+            currentMonth = i;
+            renderCalendar(currentYear, currentMonth);
+            toggleMonthSelector();
+          };
+          monthSelector.appendChild(button);
+        }
       }
 
       function toggleMonthSelector() {
-        document.getElementById("month-selector").classList.toggle("active");
+        const monthSelector = document.getElementById("month-selector");
+        monthSelector.classList.toggle("active");
       }
 
-      function selectMonth(month) {
-        currentMonth = month;
-        document.getElementById("month-selector").classList.remove("active");
-        renderCalendar();
-      }
-
-      function toggleScheduleForm() {
-        const form = document.getElementById("schedule-form");
-        form.style.display = form.style.display === "flex" ? "none" : "flex";
+      function toggleAddScheduleForm() {
+        const form = document.getElementById("add-schedule-form");
+        form.style.display = form.style.display === "none" ? "block" : "none";
       }
 
       function addSchedule() {
         const date = document.getElementById("schedule-date").value;
         const title = document.getElementById("schedule-title").value;
-
         if (date && title) {
-          displayedSchedules.push({ date, title });
-          renderCalendar();
-          updateScheduleList(date, title);
+          schedules.push({ date, title });
+          renderCalendar(currentYear, currentMonth);
           document.getElementById("schedule-date").value = "";
           document.getElementById("schedule-title").value = "";
-          toggleScheduleForm();
-        } else {
-          alert("모든 필드를 채워주세요.");
+          toggleAddScheduleForm();
+          renderScheduleList();
         }
       }
 
-      function updateScheduleList(date, title) {
-        const scheduleList = document.getElementById("added-schedule-list");
-        const scheduleItem = document.createElement("li");
-        scheduleItem.className = "added-schedule-item";
-        scheduleItem.innerHTML = `<span>${date}: ${title}</span><button class="delete-button" onclick="deleteSchedule('${date}', '${title}', this)">삭제</button>`;
-        scheduleList.appendChild(scheduleItem);
+      function renderScheduleList() {
+        const scheduleList = document.getElementById("schedule-list");
+        scheduleList.innerHTML = "";
+        schedules.forEach((schedule, index) => {
+          const li = document.createElement("li");
+          li.innerText = `${schedule.date} - ${schedule.title}`;
+          const deleteButton = document.createElement("button");
+          deleteButton.className = "delete-button";
+          deleteButton.innerText = "삭제";
+          deleteButton.onclick = () => {
+            schedules.splice(index, 1);
+            renderCalendar(currentYear, currentMonth);
+            renderScheduleList();
+          };
+          li.appendChild(deleteButton);
+          scheduleList.appendChild(li);
+        });
       }
 
-      function deleteSchedule(date, title, button) {
-        displayedSchedules = displayedSchedules.filter(
-          (schedule) => !(schedule.date === date && schedule.title === title)
-        );
-        renderCalendar();
-        button.parentElement.remove();
+      function toggleAddDocumentForm() {
+        const form = document.getElementById("add-document-form");
+        form.style.display = form.style.display === "none" ? "block" : "none";
       }
 
-      document.addEventListener("DOMContentLoaded", () => {
-        renderCalendar();
-      });
+      function addDocument() {
+        const fileInput = document.getElementById("document-file");
+        const file = fileInput.files[0];
+        if (file) {
+          documents.push(file);
+          renderDocumentList();
+          fileInput.value = "";
+          toggleAddDocumentForm();
+        }
+      }
+
+      function renderDocumentList() {
+        const documentList = document.getElementById("document-list");
+        documentList.innerHTML = "";
+        documents.forEach((document, index) => {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = "#";
+          a.innerText = document.name;
+          li.appendChild(a);
+          documentList.appendChild(li);
+        });
+      }
     </script>
   </body>
 </html>
