@@ -107,6 +107,19 @@
         margin: 0;
         list-style-type: none;
       }
+      .group-members button {
+        background-color: #00796b;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      
+      .group-members button:hover {
+        background-color: #00695c;
+      }
       .group-members li,
       .schedule li,
       .documents li {
@@ -259,9 +272,9 @@
     <div class="container">
       <div class="sidebar">
         <div class="group-members">
-          <h3>그룹 멤버</h3>
-          <ul>
-            <li>김연희</li>
+          <button onclick="toggleGroupMembers()">그룹 멤버</button>
+          <ul id="group-members-list" style="display: none">
+            <li>김연휘</li>
             <li>최현준</li>
             <li>윤준식</li>
             <li>이예호</li>
@@ -438,6 +451,12 @@
           monthSelector.appendChild(button);
         }
       }
+      // Toggle group members list
+      function toggleGroupMembers() {
+       const groupMembersList = document.getElementById('group-members-list');
+       groupMembersList.style.display =
+      groupMembersList.style.display === 'none' ? 'block' : 'none';
+}
 
       function toggleMonthSelector() {
         const monthSelector = document.getElementById("month-selector");
