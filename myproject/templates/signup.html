@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - 오픈소스 기초프로젝트</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-[#00695c] text-white py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold"><a href="home.html" class="hover:underline">오픈소스 기초프로젝트</a></h1>
+            <!-- 우측 상단의 로그인 버튼 삭제 -->
+        </div>
+    </header>
+
+    <section class="container mx-auto mt-10">
+        <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold text-center mb-6">회원가입</h2>
+            <form>
+                <div class="mb-4">
+                    <label class="block text-gray-700">이메일 주소</label>
+                    <input type="email" id="email" class="w-full p-3 rounded border border-gray-300" placeholder="이메일 주소">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">이름</label>
+                    <input type="text" id="name" class="w-full p-3 rounded border border-gray-300" placeholder="이름">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">아이디</label>
+                    <input type="text" id="username" class="w-full p-3 rounded border border-gray-300" placeholder="아이디">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">비밀번호</label>
+                    <input type="password" id="password" class="w-full p-3 rounded border border-gray-300" placeholder="비밀번호">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">비밀번호 재확인</label>
+                    <input type="password" id="confirm_password" class="w-full p-3 rounded border border-gray-300" placeholder="비밀번호 재확인">
+                    <p id="message" class="mt-2 text-sm"></p>
+                </div>
+                <button type="submit" class="w-full bg-[#00695c] text-white p-3 rounded mb-4">회원가입</button>
+            </form>
+            <div class="text-center">
+                <a href="login.html" class="hover:underline text-[#00695c]">로그인</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('confirm_password').addEventListener('input', function() {
+            var password = document.getElementById('password').value;
+            var confirmPassword = document.getElementById('confirm_password').value;
+            var message = document.getElementById('message');
+            
+            if (confirmPassword === password) {
+                message.textContent = '비밀번호가 일치합니다.';
+                message.style.color = 'green';
+            } else {
+                message.textContent = '비밀번호가 일치하지 않습니다.';
+                message.style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>
