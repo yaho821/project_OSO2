@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user_name }}의 캘린더</title>
+    <style>
+        /* 동일한 스타일 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+        .home-button {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #00796b;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 250px;
+            padding: 20px;
+            background-color: #f7fafc;
+            border-right: 1px solid #e2e8f0;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .calendar {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .calendar th,
+        .calendar td {
+            border: 1px solid #e2e8f0;
+            width: 14.28%;
+            height: 100px;
+            text-align: center;
+            vertical-align: top;
+            color: #333;
+            font-size: 14px;
+        }
+        .calendar th {
+            background-color: #f7fafc;
+            font-weight: bold;
+        }
+        .group-list,
+        .schedule,
+        .invitations {
+            margin-bottom: 20px;
+        }
+        .group-list h3,
+        .schedule h3,
+        .invitations h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+        .group-list ul,
+        .schedule ul,
+        .invitations ul {
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+        }
+        .group-list li,
+        .schedule li,
+        .invitations li {
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .group-list li a,
+        .invitations li a {
+            color: #00796b;
+            text-decoration: none;
+        }
+        .group-list li button,
+        .invitations li button {
+            background-color: #e53935;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .group-list li button:hover,
+        .invitations li button:hover {
+            background-color: #d32f2f;
+        }
+        .schedule-item:hover .schedule-details {
+            display: block;
+        }
+        .highlight {
+            background-color: #e0f7fa;
+        }
+        .add-schedule-form,
+        .add-group-form {
+            margin-bottom: 20px;
+        }
+        .add-schedule-form input,
+        .add-group-form input {
+            margin-right: 10px;
+            padding: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .add-schedule-form button,
+        .add-group-form button {
+            padding: 8px 16px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .add-schedule-form button:hover,
+        .add-group-form button:hover {
+            background-color: #00695c;
+        }
+        .header-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header-buttons button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .calendar-icon {
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .delete-button {
+            margin-left: 5px; /* X 버튼을 오른쪽으로 띄우는 여백 조절 */
+        }
+        .month-selector {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            z-index: 1000;
+        }
+        .month-selector.active {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .month-selector button {
+            padding: 8px;
+            font-size: 16px;
+            background-color: none;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .month-selector button:hover {
+            background-color: #00695c;
+        }
+        .accept-button {
+        background-color: #00796b;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .accept-button:hover {
+        background-color: #00695c;
+    }
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background-color: #ff4d4d;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/logout" class="logout-button">로그아웃</a>
+        <h1>{{ user_name }}의 캘린더</h1>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <div class="group-list">
+                <h3>그룹 목록</h3>
+                <ul id="group-list">
+                    <!-- 그룹 목록이 여기 채워질 것입니다 -->
+                </ul>
+            </div>
+            <div class="add-group-form">
+                <input type="text" id="new-group-name" placeholder="새 그룹 이름">
+                <button onclick="addGroup()">그룹 추가하기</button>
+            </div>
+            <div class="schedule">
+                <h3>일정 추가</h3>
+                <div class="add-schedule-form">
+                    <input type="date" id="event-date" placeholder="날짜">
+                    <input type="text" id="event-title" placeholder="일정 제목">
+                    <button onclick="addEvent()">추가</button>
+                </div>
+                <h3>일정 삭제</h3>
+                <div class="add-schedule-form">
+                    <input type="date" id="delete-event-date" placeholder="날짜">
+                    <button onclick="deleteEvent()">삭제</button>
+                </div>
+            </div>
+            <div class="invitations">
+                <h3>알림</h3>
+                <ul id="invitation-list">
+                    <!-- 초대 목록이 여기 채워질 것입니다 -->
+                </ul>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="header-buttons">
+                <button onclick="prevMonth()">&#9664;</button>
+                <span id="calendar-header" style="margin: 0 20px; font-size: 18px"></span>
+                <button onclick="nextMonth()">&#9654;</button>
+                <span class="calendar-icon" onclick="toggleMonthSelector()">📅</span>
+                <div class="month-selector" id="month-selector">
+                    <button onclick="selectMonth(0)">1</button>
+                    <button onclick="selectMonth(1)">2</button>
+                    <button onclick="selectMonth(2)">3</button>
+                    <button onclick="selectMonth(3)">4</button>
+                    <button onclick="selectMonth(4)">5</button>
+                    <button onclick="selectMonth(5)">6</button>
+                    <button onclick="selectMonth(6)">7</button>
+                    <button onclick="selectMonth(7)">8</button>
+                    <button onclick="selectMonth(8)">9</button>
+                    <button onclick="selectMonth(9)">10</button>
+                    <button onclick="selectMonth(10)">11</button>
+                    <button onclick="selectMonth(11)">12</button>
+                </div>
+            </div>
+            <table class="calendar">
+                <thead>
+                    <tr>
+                        <th>SUN</th>
+                        <th>MON</th>
+                        <th>TUE</th>
+                        <th>WED</th>
+                        <th>THU</th>
+                        <th>FRI</th>
+                        <th>SAT</th>
+                    </tr>
+                </thead>
+                <tbody id="calendar-body">
+                    <!-- Calendar will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchGroups();
+            fetchEvents();
+            fetchInvitations();
+        });
+
+        function fetchGroups() {
+            fetch('/get_groups')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const groupList = document.getElementById('group-list');
+                        groupList.innerHTML = '';
+                        data.groups.forEach(group => {
+                            const listItem = document.createElement('li');
+                            const link = document.createElement('a');
+                            link.href = `/group_calendar/${group.id}`;
+                            link.textContent = group.name;
+                            listItem.appendChild(link);
+                            if (group.is_owner) {
+                                const deleteButton = document.createElement('button');
+                                deleteButton.textContent = '탈퇴';
+                                deleteButton.onclick = () => deleteGroup(group.id);
+                                listItem.appendChild(deleteButton);
+                            } else {
+                                const leaveButton = document.createElement('button');
+                                leaveButton.textContent = '탈퇴';
+                                leaveButton.onclick = () => leaveGroup(group.id);
+                                listItem.appendChild(leaveButton);
+                            }
+                            groupList.appendChild(listItem);
+                        });
+                    } else {
+                        alert('그룹을 불러오는 데 실패했습니다.');
+                    }
+                });
+        }
+
+        function fetchInvitations() {
+            fetch('/get_invitations')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const invitationList = document.getElementById('invitation-list');
+                        invitationList.innerHTML = '';
+                        data.invitations.forEach(invitation => {
+                            if (invitation.status === 'pending') {
+                                const listItem = document.createElement('li');
+                                listItem.innerHTML = `${invitation.group_name} 초대 (보낸 사람: ${invitation.sender}) - 상태: ${invitation.status} `;
+                                const acceptButton = document.createElement('button');
+                                acceptButton.textContent = '수락';
+                                acceptButton.classList.add('accept-button');
+                                acceptButton.onclick = () => respondInvitation(invitation.id, 'accepted');
+                                listItem.appendChild(acceptButton);
+
+                                const rejectButton = document.createElement('button');
+                                rejectButton.textContent = '거절';
+                                rejectButton.onclick = () => respondInvitation(invitation.id, 'rejected');
+                                listItem.appendChild(rejectButton);
+                                invitationList.appendChild(listItem);
+                            }
+                        });
+                    } else {
+                        alert('초대를 불러오는 데 실패했습니다.');
+                    }
+                });
+        }
+
+        function respondInvitation(invitationId, response) {
+            fetch('/respond_invitation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ invitation_id: invitationId, response: response }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    fetchInvitations();
+                    fetchGroups();
+                } else {
+                    alert('초대 응답에 실패했습니다.');
+                }
+            });
+        }
+
+        function addGroup() {
+            const groupName = document.getElementById('new-group-name').value.trim();
+            if (groupName) {
+                fetch('/add_group', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name: groupName }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        fetchGroups();
+                        document.getElementById('new-group-name').value = '';
+                    } else {
+                        alert('그룹을 추가하는 데 실패했습니다.');
+                    }
+                });
+            } else {
+                alert('그룹 이름을 입력하세요.');
+            }
+        }
+
+        function deleteGroup(groupId) {
+            fetch(`/delete_group/${groupId}`, {
+                method: 'DELETE',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    fetchGroups();
+                } else {
+                    alert('그룹을 삭제하는 데 실패했습니다.');
+                }
+            });
+        }
+
+        function leaveGroup(groupId) {
+            fetch(`/leave_group/${groupId}`, {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    fetchGroups();
+                } else {
+                    alert('그룹을 탈퇴하는 데 실패했습니다.');
+                }
+            });
+        }
+
+        function fetchEvents() {
+            fetch('/get_events')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        renderCalendar(data.events);
+                    } else {
+                        console.error('Error:', data.error);
+                        alert(`일정을 불러오는 데 실패했습니다: ${data.message}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    alert('일정을 불러오는 도중 오류가 발생했습니다.');
+                });
+        }
+
+        function addEvent() {
+            const eventDate = document.getElementById('event-date').value;
+            const eventTitle = document.getElementById('event-title').value;
+            if (eventDate && eventTitle) {
+                fetch('/add_event', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ date: eventDate, title: eventTitle }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        fetchEvents();
+                        document.getElementById('event-date').value = '';
+                        document.getElementById('event-title').value = '';
+                    } else {
+                        alert('일정을 추가하는 데 실패했습니다.');
+                    }
+                });
+            } else {
+                alert('날짜와 일정 제목을 입력하세요.');
+            }
+        }
+
+        function renderCalendar(events) {
+            const calendar = document.getElementById("calendar-body");
+
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+            let html = "";
+            let day = 1;
+
+            for (let i = 0; i < 6; i++) {
+                html += "<tr>";
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < firstDay) {
+                        html += "<td></td>";
+                    } else if (day > daysInMonth) {
+                        html += "<td></td>";
+                    } else {
+                        const date = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        const event = events.find(e => e.date === date);
+                        html += `<td>${day}${event ? `<br>${event.title}` : ''}</td>`;
+                        day++;
+                    }
+                }
+                html += "</tr>";
+                if (day > daysInMonth) break;
+            }
+
+            calendar.innerHTML = html;
+            document.getElementById('calendar-header').textContent = `${currentYear}년 ${currentMonth + 1}월`;
+        }
+
+        function prevMonth() {
+            if (currentMonth === 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else {
+                currentMonth--;
+            }
+            fetchEvents();
+        }
+
+        function nextMonth() {
+            if (currentMonth === 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else {
+                currentMonth++;
+            }
+            fetchEvents();
+        }
+
+        function toggleMonthSelector() {
+            document.getElementById("month-selector").classList.toggle("active");
+        }
+
+        function selectMonth(month) {
+            currentMonth = month;
+            document.getElementById("month-selector").classList.remove("active");
+            fetchEvents();
+        }
+
+        function deleteEvent() {
+            const deleteDate = document.getElementById('delete-event-date').value;
+            if (deleteDate) {
+                fetch('/delete_event', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ date: deleteDate }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        fetchEvents();
+                        document.getElementById('delete-event-date').value = '';
+                    } else {
+                        alert('일정을 삭제하는 데 실패했습니다.');
+                    }
+                });
+            } else {
+                alert('삭제할 날짜를 입력하세요.');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홈 - 오픈소스 기초프로젝트</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hidden {
+            display: none;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .error-border {
+            border-color: red;
+        }
+        .error-message {
+            color: red;
+        }
+        .scrollable {
+            max-height: 330px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-[#00695c] text-white py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold"><a href="/" class="hover:underline">오픈소스 기초프로젝트</a></h1>
+        </div>
+    </header>
+
+    <section class="container mx-auto mt-10 flex">
+        <!-- Calendar -->
+        <div class="w-1/2 p-8">
+            <img src="/static/calendar.png" alt="달력 이미지" class="mx-auto">
+        </div>
+
+        <!-- Forms -->
+        <div class="w-1/2 p-8">
+            <!-- Login Form -->
+            <div id="login-form" class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold text-center mb-6">로그인</h2>
+                <form id="login-form-inner">
+                    <div class="mb-4">
+                        <label class="block text-gray-700">아이디</label>
+                        <input type="text" id="login-username" class="w-full p-3 rounded border border-gray-300" placeholder="아이디">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700">비밀번호</label>
+                        <input type="password" id="login-password" class="w-full p-3 rounded border border-gray-300" placeholder="비밀번호">
+                    </div>
+                    <button type="submit" class="w-full bg-[#00695c] text-white p-3 rounded">로그인</button>
+                    <p class="mt-4 text-center">
+                        <a href="#" id="forgot-password-link" class="text-[#00695c] hover:underline">아이디 / 비밀번호 찾기</a>
+                        <span class="mx-2">|</span>
+                        <a href="#" id="signup-link" class="text-[#00695c] hover:underline">회원가입</a>
+                    </p>
+                </form>
+            </div>
+            <!-- Forgot Password Form -->
+            <div id="forgot-password-form" class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg hidden">
+                <h2 class="text-2xl font-bold text-center mb-6">아이디 / 비밀번호 찾기</h2>
+                <form id="forgot-password-form-inner">
+                    <div class="mb-4">
+                        <label class="block text-gray-700">이메일 주소</label>
+                        <input type="email" id="forgot-email" class="w-full p-3 rounded border border-gray-300" placeholder="이메일 주소">
+                    </div>
+                    <button type="submit" class="w-full bg-[#00695c] text-white p-3 rounded">아이디 찾기</button>
+                </form>
+                <form id="forgot-password-reset-form" class="mt-6">
+                    <div class="mb-4">
+                        <label class="block text-gray-700">아이디</label>
+                        <input type="text" id="reset-username" class="w-full p-3 rounded border border-gray-300" placeholder="아이디">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700">이메일 주소</label>
+                        <input type="email" id="reset-email" class="w-full p-3 rounded border border-gray-300" placeholder="이메일 주소">
+                    </div>
+                    <button type="submit" class="w-full bg-[#00695c] text-white p-3 rounded mb-4">비밀번호 찾기</button>
+                </form>
+                <div class="text-center mt-6">
+                    <a href="#" id="login-link-from-forgot" class="text-[#00695c] hover:underline">로그인</a>
+                    <span class="mx-2">|</span>
+                    <a href="#" id="signup-link-from-forgot" class="text-[#00695c] hover:underline">회원가입</a>
+                </div>
+            </div>
+            <!-- Signup Form -->
+            <div id="signup-form" class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg hidden">
+                <h2 class="text-2xl font-bold text-center mb-6">회원가입</h2>
+                <div class="scrollable">
+                    <form id="signup-form-inner">
+                        <div class="mb-4">
+                            <label class="block text-gray-700">이메일 주소</label>
+                            <input type="email" id="signup-email" class="w-full p-3 rounded border border-gray-300" placeholder="이메일 주소">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700">이름</label>
+                            <input type="text" id="signup-name" class="w-full p-3 rounded border border-gray-300" placeholder="이름">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700">아이디</label>
+                            <input type="text" id="signup-username" class="w-full p-3 rounded border border-gray-300" placeholder="아이디">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700">비밀번호</label>
+                            <input type="password" id="signup-password" class="w-full p-3 rounded border border-gray-300" placeholder="비밀번호">
+                            <p id="email-username-message" class="mt-2 text-sm"></p>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700">비밀번호 확인</label>
+                            <input type="password" id="signup-confirm-password" class="w-full p-3 rounded border border-gray-300" placeholder="비밀번호 확인">
+                            <p id="password-message" class="mt-2 text-sm"></p>
+                        </div>
+                        <button type="submit" class="w-full bg-[#00695c] text-white p-3 rounded mb-4">회원가입</button>
+                    </form>
+                </div>
+                <div class="text-center mt-6">
+                    <a href="#" id="login-link-from-signup" class="hover:underline text-[#00695c]">로그인</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("DOM fully loaded and parsed");
+
+            document.getElementById('forgot-password-link').addEventListener('click', function(event) {
+                event.preventDefault();
+                console.log("Forgot password link clicked");
+                document.getElementById('login-form').classList.add('hidden');
+                document.getElementById('signup-form').classList.add('hidden');
+                document.getElementById('forgot-password-form').classList.remove('hidden');
+                document.getElementById('forgot-password-form').classList.add('fade-in');
+            });
+
+            document.getElementById('signup-link').addEventListener('click', function(event) {
+                event.preventDefault();
+                console.log("Signup link clicked");
+                document.getElementById('login-form').classList.add('hidden');
+                document.getElementById('forgot-password-form').classList.add('hidden');
+                document.getElementById('signup-form').classList.remove('hidden');
+                document.getElementById('signup-form').classList.add('fade-in');
+            });
+
+            document.getElementById('login-link-from-forgot').addEventListener('click', function(event) {
+                event.preventDefault();
+                console.log("Login link from forgot clicked");
+                document.getElementById('forgot-password-form').classList.add('hidden');
+                document.getElementById('signup-form').classList.add('hidden');
+                document.getElementById('login-form').classList.remove('hidden');
+                document.getElementById('login-form').classList.add('fade-in');
+            });
+
+            document.getElementById('signup-link-from-forgot').addEventListener('click', function(event) {
+                event.preventDefault();
+                console.log("Signup link from forgot clicked");
+                document.getElementById('login-form').classList.add('hidden');
+                document.getElementById('forgot-password-form').classList.add('hidden');
+                document.getElementById('signup-form').classList.remove('hidden');
+                document.getElementById('signup-form').classList.add('fade-in');
+            });
+
+            document.getElementById('login-link-from-signup').addEventListener('click', function(event) {
+                event.preventDefault();
+                console.log("Login link from signup clicked");
+                document.getElementById('signup-form').classList.add('hidden');
+                document.getElementById('forgot-password-form').classList.add('hidden');
+                document.getElementById('login-form').classList.remove('hidden');
+                document.getElementById('login-form').classList.add('fade-in');
+            });
+
+            document.getElementById('signup-password').addEventListener('input', function() {
+                var email = document.getElementById('signup-email').value;
+                var username = document.getElementById('signup-username').value;
+                var emailUsernameMessage = document.getElementById('email-username-message');
+                console.log("Password input changed");
+
+                if (!email || !username) {
+                    if (!email) {
+                        document.getElementById('signup-email').classList.add('error-border');
+                    } else {
+                        document.getElementById('signup-email').classList.remove('error-border');
+                    }
+
+                    if (!username) {
+                        document.getElementById('signup-username').classList.add('error-border');
+                    } else {
+                        document.getElementById('signup-username').classList.remove('error-border');
+                    }
+
+                    emailUsernameMessage.textContent = '이메일 또는 아이디를 입력해주세요.';
+                    emailUsernameMessage.classList.add('error-message');
+                } else {
+                    document.getElementById('signup-email').classList.remove('error-border');
+                    document.getElementById('signup-username').classList.remove('error-border');
+                    emailUsernameMessage.textContent = '';
+                    emailUsernameMessage.classList.remove('error-message');
+                }
+            });
+
+            document.getElementById('signup-confirm-password').addEventListener('input', function() {
+                var password = document.getElementById('signup-password').value;
+                var confirmPassword = document.getElementById('signup-confirm-password').value;
+                var passwordMessage = document.getElementById('password-message');
+                console.log("Confirm password input changed");
+
+                if (confirmPassword === password) {
+                    passwordMessage.textContent = '비밀번호가 일치합니다.';
+                    passwordMessage.style.color = 'green';
+                } else {
+                    passwordMessage.textContent = '비밀번호가 일치하지 않습니다.';
+                    passwordMessage.style.color = 'red';
+                }
+            });
+
+            document.getElementById('signup-form-inner').addEventListener('submit', function(event) {
+                event.preventDefault();
+                console.log("Signup form submitted");
+
+                var email = document.getElementById('signup-email').value;
+                var name = document.getElementById('signup-name').value;
+                var username = document.getElementById('signup-username').value;
+                var password = document.getElementById('signup-password').value;
+                var confirmPassword = document.getElementById('signup-confirm-password').value;
+                var message = document.getElementById('password-message');
+
+                if (password !== confirmPassword) {
+                    message.textContent = '비밀번호가 일치하지 않습니다.';
+                    message.style.color = 'red';
+                    return;
+                }
+
+                console.log("회원가입 요청 전송 중...");
+
+                fetch('/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: email, name: name, username: username, password: password })
+                })
+                .then(response => {
+                    console.log("Response received:", response);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Response data:", data);
+                    if (data.success) {
+                        window.location.href = data.redirect;
+                    } else {
+                        message.textContent = data.message;
+                        message.style.color = 'red';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    message.textContent = '오류가 발생했습니다. 다시 시도해주세요.';
+                    message.style.color = 'red';
+                });
+            });
+
+            document.getElementById('login-form-inner').addEventListener('submit', function(event) {
+                event.preventDefault();
+                console.log("Login form submitted");
+
+                var username = document.getElementById('login-username').value;
+                var password = document.getElementById('login-password').value;
+                var message = document.createElement('p');
+
+                console.log("로그인 요청 전송 중...");
+
+                fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username: username, password: password })
+                })
+                .then(response => {
+                    console.log("Response received:", response);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Response data:", data);
+                    if (data.success) {
+                        window.location.href = '/personal_calendar';
+                    } else {
+                        message.textContent = data.message;
+                        message.style.color = 'red';
+                        document.getElementById('login-form-inner').appendChild(message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    message.textContent = '오류가 발생했습니다. 다시 시도해주세요.';
+                    message.style.color = 'red';
+                    document.getElementById('login-form-inner').appendChild(message);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
