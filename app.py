@@ -123,6 +123,7 @@ def group_calendar(group_id):
     else:
         return redirect(url_for('home'))
 
+
 @app.route('/grouppage')
 def group_page():
     if 'username' in session:
@@ -317,8 +318,7 @@ def get_group_events(group_id):
         cursor.close()
         return jsonify({'success': True, 'events': [{'title': event[0], 'date': event[1].strftime('%Y-%m-%d')} for event in events]})
     except Exception as e:
-        print("Exception in get_group_events:", str(e))  # 로그에 예외 메시지를 출력합니다.
-        return jsonify({'success': False, 'message': '서버 내부 오류가 발생했습니다.', 'error': str(e)}), 500
+        return jsonify({'success': False, 'message': '서버 내부 오류가 발생했습니다.'}), 500
 
 @app.route('/add_group_event', methods=['POST'])
 def add_group_event():
@@ -562,3 +562,4 @@ def get_group_files(group_id):
 
 if __name__ == '__main__':
     app.run(debug=True)
+

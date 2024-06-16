@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
             margin: 0;
             padding: 0;
         }
+
         .header {
             text-align: center;
             margin-bottom: 20px;
@@ -19,11 +21,13 @@
             background-color: white;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .header h1 {
             margin: 0;
             font-size: 24px;
             color: #333;
         }
+
         .home-button {
             display: block;
             margin-bottom: 10px;
@@ -35,6 +39,7 @@
             border-radius: 5px;
             font-size: 16px;
         }
+
         .container {
             display: flex;
             max-width: 1200px;
@@ -44,20 +49,24 @@
             border-radius: 8px;
             overflow: hidden;
         }
+
         .sidebar {
             width: 250px;
             padding: 20px;
             background-color: #f7fafc;
             border-right: 1px solid #e2e8f0;
         }
+
         .main-content {
             flex-grow: 1;
             padding: 20px;
         }
+
         .calendar {
             width: 100%;
             border-collapse: collapse;
         }
+
         .calendar th,
         .calendar td {
             border: 1px solid #e2e8f0;
@@ -68,15 +77,18 @@
             color: #333;
             font-size: 14px;
         }
+
         .calendar th {
             background-color: #f7fafc;
             font-weight: bold;
         }
+
         .group-list,
         .schedule,
         .invitations {
             margin-bottom: 20px;
         }
+
         .group-list h3,
         .schedule h3,
         .invitations h3 {
@@ -84,6 +96,7 @@
             font-size: 18px;
             color: #333;
         }
+
         .group-list ul,
         .schedule ul,
         .invitations ul {
@@ -91,6 +104,7 @@
             margin: 0;
             list-style-type: none;
         }
+
         .group-list li,
         .schedule li,
         .invitations li {
@@ -101,11 +115,13 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .group-list li a,
         .invitations li a {
             color: #00796b;
             text-decoration: none;
         }
+
         .group-list li button,
         .invitations li button {
             background-color: #e53935;
@@ -115,20 +131,25 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .group-list li button:hover,
         .invitations li button:hover {
             background-color: #d32f2f;
         }
+
         .schedule-item:hover .schedule-details {
             display: block;
         }
+
         .highlight {
             background-color: #e0f7fa;
         }
+
         .add-schedule-form,
         .add-group-form {
             margin-bottom: 20px;
         }
+
         .add-schedule-form input,
         .add-group-form input {
             margin-right: 10px;
@@ -137,6 +158,7 @@
             border-radius: 4px;
             font-size: 14px;
         }
+
         .add-schedule-form button,
         .add-group-form button {
             padding: 8px 16px;
@@ -147,29 +169,36 @@
             font-size: 14px;
             cursor: pointer;
         }
+
         .add-schedule-form button:hover,
         .add-group-form button:hover {
             background-color: #00695c;
         }
+
         .header-buttons {
             display: flex;
             justify-content: center;
             align-items: center;
             margin-bottom: 20px;
         }
+
         .header-buttons button {
             background: none;
             border: none;
             font-size: 20px;
             cursor: pointer;
         }
+
         .calendar-icon {
             font-size: 20px;
             cursor: pointer;
         }
+
         .delete-button {
-            margin-left: 5px; /* X 버튼을 오른쪽으로 띄우는 여백 조절 */
+            margin-left: 5px;
+            /* X 버튼을 오른쪽으로 띄우는 여백 조절 */
         }
+
         .month-selector {
             display: none;
             position: absolute;
@@ -179,11 +208,13 @@
             border-radius: 8px;
             z-index: 1000;
         }
+
         .month-selector.active {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
         }
+
         .month-selector button {
             padding: 8px;
             font-size: 16px;
@@ -193,20 +224,24 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .month-selector button:hover {
             background-color: #00695c;
         }
+
         .accept-button {
-        background-color: #00796b;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    .accept-button:hover {
-        background-color: #00695c;
-    }
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .accept-button:hover {
+            background-color: #00695c;
+        }
+
         .logout-button {
             position: absolute;
             top: 10px;
@@ -220,6 +255,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <a href="/logout" class="logout-button">로그아웃</a>
@@ -243,6 +279,12 @@
                     <input type="date" id="event-date" placeholder="날짜">
                     <input type="text" id="event-title" placeholder="일정 제목">
                     <button onclick="addEvent()">추가</button>
+                </div>
+                <h3>그룹 일정 가져오기</h3>
+                <div class="add-schedule-form">
+                    <select id="group-select">
+                    </select>
+                    <button onclick="fetchGroupSchedules()">일정 가져오기</button>
                 </div>
                 <h3>일정 삭제</h3>
                 <div class="add-schedule-form">
@@ -300,10 +342,11 @@
         let currentYear = new Date().getFullYear();
         let currentMonth = new Date().getMonth();
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             fetchGroups();
             fetchEvents();
             fetchInvitations();
+            populateGroupSelect();
         });
 
         function fetchGroups() {
@@ -376,15 +419,15 @@
                 },
                 body: JSON.stringify({ invitation_id: invitationId, response: response }),
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    fetchInvitations();
-                    fetchGroups();
-                } else {
-                    alert('초대 응답에 실패했습니다.');
-                }
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        fetchInvitations();
+                        fetchGroups();
+                    } else {
+                        alert('초대 응답에 실패했습니다.');
+                    }
+                });
         }
 
         function addGroup() {
@@ -397,15 +440,15 @@
                     },
                     body: JSON.stringify({ name: groupName }),
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        fetchGroups();
-                        document.getElementById('new-group-name').value = '';
-                    } else {
-                        alert('그룹을 추가하는 데 실패했습니다.');
-                    }
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            fetchGroups();
+                            document.getElementById('new-group-name').value = '';
+                        } else {
+                            alert('그룹을 추가하는 데 실패했습니다.');
+                        }
+                    });
             } else {
                 alert('그룹 이름을 입력하세요.');
             }
@@ -415,28 +458,28 @@
             fetch(`/delete_group/${groupId}`, {
                 method: 'DELETE',
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    fetchGroups();
-                } else {
-                    alert('그룹을 삭제하는 데 실패했습니다.');
-                }
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        fetchGroups();
+                    } else {
+                        alert('그룹을 삭제하는 데 실패했습니다.');
+                    }
+                });
         }
 
         function leaveGroup(groupId) {
             fetch(`/leave_group/${groupId}`, {
                 method: 'POST',
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    fetchGroups();
-                } else {
-                    alert('그룹을 탈퇴하는 데 실패했습니다.');
-                }
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        fetchGroups();
+                    } else {
+                        alert('그룹을 탈퇴하는 데 실패했습니다.');
+                    }
+                });
         }
 
         function fetchEvents() {
@@ -467,16 +510,16 @@
                     },
                     body: JSON.stringify({ date: eventDate, title: eventTitle }),
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        fetchEvents();
-                        document.getElementById('event-date').value = '';
-                        document.getElementById('event-title').value = '';
-                    } else {
-                        alert('일정을 추가하는 데 실패했습니다.');
-                    }
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            fetchEvents();
+                            document.getElementById('event-date').value = '';
+                            document.getElementById('event-title').value = '';
+                        } else {
+                            alert('일정을 추가하는 데 실패했습니다.');
+                        }
+                    });
             } else {
                 alert('날짜와 일정 제목을 입력하세요.');
             }
@@ -553,19 +596,92 @@
                     },
                     body: JSON.stringify({ date: deleteDate }),
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        fetchEvents();
-                        document.getElementById('delete-event-date').value = '';
-                    } else {
-                        alert('일정을 삭제하는 데 실패했습니다.');
-                    }
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            fetchEvents();
+                            document.getElementById('delete-event-date').value = '';
+                        } else {
+                            alert('일정을 삭제하는 데 실패했습니다.');
+                        }
+                    });
             } else {
                 alert('삭제할 날짜를 입력하세요.');
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchGroups();
+            fetchEvents();
+            fetchInvitations();
+            populateGroupSelect();
+        });
+
+        function populateGroupSelect() {
+            fetch('/get_groups')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const groupSelect = document.getElementById('group-select');
+                        groupSelect.innerHTML = '';
+                        data.groups.forEach(group => {
+                            const option = document.createElement('option');
+                            option.value = group.id;
+                            option.textContent = group.name;
+                            groupSelect.appendChild(option);
+                        });
+                    } else {
+                        alert('그룹 목록을 불러오는 데 실패했습니다.');
+                    }
+                });
+        }
+
+        function fetchGroupSchedules() {
+            const groupSelect = document.getElementById('group-select');
+            const groupId = groupSelect.value;
+
+            fetch(`/get_group_events/${groupId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // 일정 데이터를 처리하는 코드
+                        console.log(data.events);
+                        data.events.forEach(event => {
+                            addGroupEventToPersonalCalendar(event.title, event.date);
+                        });
+                    } else {
+                        console.error('Error:', data.error);
+                        alert(`일정을 가져오는 데 실패했습니다: ${data.message}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+        }
+
+        function addGroupEventToPersonalCalendar(title, date) {
+            fetch('/add_event', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ date: date, title: title }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        fetchEvents();
+                    } else {
+                        alert('그룹 일정을 개인 캘린더에 추가하는 데 실패했습니다.');
+                    }
+                });
+        }
     </script>
 </body>
+
 </html>
